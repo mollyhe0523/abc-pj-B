@@ -1,7 +1,0 @@
-<a href="http://www.glitterfy.com/"><img src="http://img41.glitterfy.com/20270/glitterfy0154412T907B81.gif" alt="Glitter Words" border=0 /></a><br />
-
-These glittering pics are quite of Y2K culture.
-
-The author states that "Starry backgrounds represented the future, a touching relationship with the medium of tomorrow. Glitter decorates the web of today, routine and taken-for-granted." Truly, glitter is what of the author's day and have long been abandoned by the fast iterating trend of tastes. But to be honest, when building a website from scratch by myself, I feel like I'm producing the similar outdated appearance of the website. It is not that I can't distinguish what is out-of-date or not. It is because the simple tools and language I'm using is so crude that it doesn't help add to the texture of the website. Most of the fancy and well-functioning websites made from helpful frameworks and templates. However, these websites mostly lack of personality and are built for a specific function or audience.
-
-Maybe it is the difference between AMATEUR and PROFESSIONAL, but I don't care to be called an amateur. Even if the professional "owns the home with the garden", while the amateurs are "the gnomes grimacing on a manicured lawn in the company of plaster ducks and real flowers",  amateurs are having fun, making and exploring things just for ourselves. The autonomy may never be acquired by the professional.
