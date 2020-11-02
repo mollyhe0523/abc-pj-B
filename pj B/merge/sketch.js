@@ -1,16 +1,20 @@
 console.log("yo");
 
-document.body.style.overflow="hidden";
-let scrollTop=window.scrollY;
+function go(){
+  document.body.style.overflow="hidden";
+}
 // console.log(scrollTop);
 
 var s= function(sketch){
+  let scrollTop=window.scrollY;
+  let scrollLeft=window.scrollX;
+
   let numSegments = 10;
   let direction = 'right';
 
   const xStart = 0; // 蛇的初始 x 坐标
   const yStart = 20; //蛇的初始 y 坐标
-  const diff = 10;
+  const diff = 5;
 
   let xCor = [];
   let yCor = [];
@@ -21,14 +25,14 @@ var s= function(sketch){
 
   sketch.setup=function(){
     scoreElem = sketch.createDiv('Score = 0');
-    scoreElem.position(20, 20);
+    scoreElem.position(scrollLeft+20, scrollTop);
     scoreElem.id = 'score';
     scoreElem.style('color', 'orange');
     scoreElem.style('z-index','100');
 
 
     let c=sketch.createCanvas(sketch.windowWidth,sketch.windowHeight);
-    c.position(0,scrollTop);
+    c.position(scrollLeft,scrollTop);
     c.style('z-index','100');
     sketch.clear();
     sketch.frameRate(15);
@@ -152,4 +156,14 @@ var s= function(sketch){
     }
   }
 }
-var myp5 = new p5(s);
+function gotMessage(message,sender,sendResponse){
+  console.log(message);
+  if(message.type == "start"){
+    go();
+    var myp5 = new p5(s);
+    // var x = document.getElementById("myCanvas");
+  }else if(message.type == "stop"){
+    p5=null;
+}
+}
+chrome.runtime.onMessage.addListener(gotMessage);

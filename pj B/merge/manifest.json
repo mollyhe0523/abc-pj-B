@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Greedy Snake",
+  "version": "1.0",
+  "author": "Molly & Yuhang",
+  "description": "Press arrow keys and let the greedy snake eat as many HTML elements as possible!",
+
+  "permissions":[
+    "activeTab"
+  ],
+  "content_scripts":[
+    {
+      "matches": ["<all_urls>"],
+      "js":["p5.js","sketch.js"]
+    }
+  ],
+  "browser_action":{
+    "default_popup": "popup/popup.html"
+  }
+}
