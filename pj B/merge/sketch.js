@@ -76,8 +76,19 @@ var s= function(sketch){
   let fruitIndex=Math.floor(Math.random()*total_list.length);
   let fruit = total_list[fruitIndex];
 
+  while ((fruit.getBoundingClientRect().left==0) && (fruit.getBoundingClientRect().top==0)){
+    fruitIndex=Math.floor(Math.random()*total_list.length);
+    fruit = total_list[fruitIndex];
+  }
+
+
   let fruitIndexNext=Math.floor(Math.random()*total_list.length);
   let fruitNext = total_list[fruitIndexNext];
+
+  while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0)){
+    fruitIndexNext=Math.floor(Math.random()*total_list.length);
+    fruitNext = total_list[fruitIndexNext];
+  }
 
   if (Array.prototype.includes.call(img_list,fruit)){
     fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
