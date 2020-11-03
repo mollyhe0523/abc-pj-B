@@ -13,8 +13,8 @@
   // find word list
     // find p list
     let p_list = document.querySelectorAll("p");
-    // create word list
-    let span_list = [];
+    // // create word list
+    // let span_list = [];
     // turn p into spans, creds: leoneckert, "text-rain"
     p_list.forEach((p_el, i) => {
       // find words in p element
