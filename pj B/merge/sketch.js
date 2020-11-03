@@ -1,8 +1,60 @@
 console.log("yo");
+let total_list = [];
+let img_list = [];
+let p_list = [];
+let span_list = [];
 
 function go(){
   document.body.style.overflow="hidden";
+  // Task A: find all HTML elements before initiating the snake
+
+  // find image list and append to total list
+  img_list = document.querySelectorAll("img");
+  console.log(img_list);
+  img_list.forEach((img_el, i) => {
+    if (isInViewport(img_el)){
+      total_list.push(img_el);
+    }
+  });
+
+  // find word list
+    // find p list
+    p_list = document.querySelectorAll("p");
+    // turn p into spans, creds: leoneckert, "text-rain"
+    p_list.forEach((p_el, i) => {
+      // find words in p element
+      let text = p_el.textContent;
+      // empty p element
+      p_el.textContent = "";
+      // split words into spans and give it back to p element
+      let words = text.split(" ");
+      words.forEach((word, i) => {
+        let wordspan = document.createElement("span");
+        wordspan.textContent = word + " ";
+        p_el.appendChild(wordspan);
+      });
+    });
+
+  // find span list and append to total list
+  span_list = document.querySelectorAll("span");
+  console.log(span_list);
+  span_list.forEach((span_el, i) => {
+    if (isInViewport(span_el)){
+      total_list.push(span_el);
+    }
+  });
+
 }
+
+var isInViewport = function (elem) {
+    var bounding = elem.getBoundingClientRect();
+    return (
+        bounding.top >= 0 &&
+        bounding.left >= 0 &&
+        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+};
 // console.log(scrollTop);
 
 var s= function(sketch){
@@ -14,13 +66,21 @@ var s= function(sketch){
 
   const xStart = 0; // 蛇的初始 x 坐标
   const yStart = 20; //蛇的初始 y 坐标
-  const diff = 5;
+  const diff = 10;
 
   let xCor = [];
   let yCor = [];
 
-  let xFruit = 100;
-  let yFruit = 100;
+  // let xFruit = 100;
+  // let yFruit = 100;
+  let fruitIndex=Math.floor(Math.random()*total_list.length);
+  let fruit = total_list[fruitIndex];
+  console.log("fruit:"+fruit);
+  if (Array.prototype.includes.call(img_list,fruit)){
+    fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
+  }else{
+    fruit.animate([{},{ backgroundColor: "#ef9702" },{}],{duration: 3000, iterations: Infinity});
+  }
   let scoreElem;
 
   sketch.setup=function(){
@@ -103,24 +163,46 @@ var s= function(sketch){
     }
   }
   sketch.checkForFruit=function() {
-    sketch.point(xFruit, yFruit);
-    // console.log(xCor[xCor.length - 1],yCor[yCor.length - 1]);
-    if (((xFruit-2) <= xCor[xCor.length - 1]) && (xCor[xCor.length - 1]<= (xFruit+2)) && ((yFruit-2)<= yCor[yCor.length - 1]) && (yCor[yCor.length - 1] <= (yFruit+2)) ) {
-      console.log("eat fruit!");
-      const prevScore = parseInt(scoreElem.html().substring(8));
-      scoreElem.html('Score = ' + (prevScore + 1));
-      xCor.unshift(xCor[0]);
-      yCor.unshift(yCor[0]);
-      numSegments++;
-      sketch.updateFruitCoordinates();
-    }
+    let pixel = 5;
+    let x = xCor[xCor.length - 1];
+    let y = yCor[yCor.length - 1];
+    // collision detection: span
+      if ( ( ( y < fruit.getBoundingClientRect().top) && ( y > fruit.getBoundingClientRect().bottom) || ( y + pixel < fruit.getBoundingClientRect().bottom) && ( y + pixel > fruit.getBoundingClientRect().top) ) && ( (x >fruit.getBoundingClientRect().left) && (x < fruit.getBoundingClientRect().right) ||      (x+pixel <fruit.getBoundingClientRect().right) && (x+pixel > fruit.getBoundingClientRect().left) ) ) {
+        fruit.style.visibility = "hidden"; // hide the element once run into
+        sketch.fruitEaten();
+      }
+
+    // collision detection: image
+        if ( ( ( y < fruit.getBoundingClientRect().top) && ( y > fruit.getBoundingClientRect().bottom) || ( y + pixel < fruit.getBoundingClientRect().bottom) && ( y + pixel > fruit.getBoundingClientRect().top) ) && ( (x >fruit.getBoundingClientRect().left) && (x < fruit.getBoundingClientRect().right) ||      (x+pixel <fruit.getBoundingClientRect().right) && (x+pixel > fruit.getBoundingClientRect().left) ) ) {
+          fruit.style.visibility = "hidden"; // hide the element once run into
+          sketch.fruitEaten();
+      }
   }
+  sketch.fruitEaten=function(){
+    console.log("eat fruit!");
+    delete total_list[fruitIndex];
+    const prevScore = parseInt(scoreElem.html().substring(8));
+    scoreElem.html('Score = ' + (prevScore + 1));
+    xCor.unshift(xCor[0]);
+    yCor.unshift(yCor[0]);
+    numSegments++;
+    sketch.updateFruitCoordinates();
+}
+
 
   sketch.updateFruitCoordinates=function () {
-    xFruit = Math.floor(sketch.random(10, (sketch.width - 100) / 10)) * 10;
-    yFruit = Math.floor(sketch.random(10, (sketch.height - 100) / 10)) * 10;
+    console.log("fruit now is:"+fruit);
+    fruitIndex = Math.floor(Math.random()*total_list.length);
+    fruit = total_list[fruitIndex];
+    if (Array.prototype.includes.call(img_list,fruit)){
+      fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
+    }else{
+      fruit.animate([{},{ backgroundColor: "#ef9702" },{}],{duration: 3000, iterations: Infinity});
+    }
+    // xFruit = Math.floor(sketch.random(10, (sketch.width - 100) / 10)) * 10;
+    // yFruit = Math.floor(sketch.random(10, (sketch.height - 100) / 10)) * 10;
     // console.log(xFruit,yFruit);
-    console.log(sketch.width,sketch.height);
+    // console.log(sketch.width,sketch.height);
 
   }
 
