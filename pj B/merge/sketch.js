@@ -75,6 +75,10 @@ var s= function(sketch){
 
   let fruitIndex=Math.floor(Math.random()*total_list.length);
   let fruit = total_list[fruitIndex];
+
+  let fruitIndexNext=Math.floor(Math.random()*total_list.length);
+  let fruitNext = total_list[fruitIndexNext];
+
   if (Array.prototype.includes.call(img_list,fruit)){
     fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
   }else{
@@ -191,25 +195,28 @@ var s= function(sketch){
     xCor.unshift(xCor[0]);
     yCor.unshift(yCor[0]);
     numSegments++;
-    sketch.updateFruitCoordinates();
-}
-
-
-  sketch.updateFruitCoordinates=function () {
-    fruitIndex = Math.floor(Math.random()*total_list.length);
-    fruit = total_list[fruitIndex];
-    console.log("new fruit");
-    console.log("fruitIndex is: "+fruitIndex);
-    console.log(fruit);
-    console.log("fruit in viewport:"+isInViewport(fruit));
-    console.log("fruit now is: ("+fruit.getBoundingClientRect().left+","+fruit.getBoundingClientRect().top+")");
-    // console.log(total_list);
+    fruit = fruitNext;
     if (Array.prototype.includes.call(img_list,fruit)){
       fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
     }else{
       fruit.animate([{},{ backgroundColor: "#ef9702" },{}],{duration: 3000, iterations: Infinity});
     }
+    console.log("new fruit");
+    console.log("fruitIndex is: "+fruitIndex);
+    console.log(fruit);
+    console.log("fruit in viewport:"+isInViewport(fruit));
+    console.log("fruit now is: ("+fruit.getBoundingClientRect().left+","+fruit.getBoundingClientRect().top+")");
+    sketch.updateFruitCoordinates();
+}
 
+
+  sketch.updateFruitCoordinates=function () {
+    fruitIndexNext = Math.floor(Math.random()*total_list.length);
+    fruitNext = total_list[fruitIndexNext];
+    while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0)){
+      sketch.updateFruitCoordinates;
+    }
+    // console.log(total_list);
   }
 
 
