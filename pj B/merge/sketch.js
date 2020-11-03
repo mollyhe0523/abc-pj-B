@@ -203,6 +203,7 @@ var s= function(sketch){
     console.log(fruit);
     console.log("fruit in viewport:"+isInViewport(fruit));
     console.log("fruit now is: ("+fruit.getBoundingClientRect().left+","+fruit.getBoundingClientRect().top+")");
+    console.log(total_list);
     if (Array.prototype.includes.call(img_list,fruit)){
       fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
     }else{
