@@ -82,7 +82,7 @@ var s= function(sketch){
   }
   console.log("First fruit");
   console.log("fruitIndex is: "+fruitIndex);
-  console.log("fruit is:"+fruit);
+  console.log(fruit);
   console.log("fruit in viewport:"+isInViewport(fruit));
   console.log("fruit is: ("+fruit.getBoundingClientRect().left+","+fruit.getBoundingClientRect().top+")");
 
@@ -185,7 +185,7 @@ var s= function(sketch){
   }
   sketch.fruitEaten=function(){
     console.log("eat fruit!");
-    delete total_list[fruitIndex];
+    total_list.splice(fruitIndex,1);
     const prevScore = parseInt(scoreElem.html().substring(8));
     scoreElem.html('Score = ' + (prevScore + 1));
     xCor.unshift(xCor[0]);
@@ -200,7 +200,7 @@ var s= function(sketch){
     fruit = total_list[fruitIndex];
     console.log("new fruit");
     console.log("fruitIndex is: "+fruitIndex);
-    console.log("fruit is:"+fruit);
+    console.log(fruit);
     console.log("fruit in viewport:"+isInViewport(fruit));
     console.log("fruit now is: ("+fruit.getBoundingClientRect().left+","+fruit.getBoundingClientRect().top+")");
     if (Array.prototype.includes.call(img_list,fruit)){
