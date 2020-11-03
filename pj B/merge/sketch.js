@@ -71,16 +71,21 @@ var s= function(sketch){
   let xCor = [];
   let yCor = [];
 
-  // let xFruit = 100;
-  // let yFruit = 100;
+  console.log("viewport is: ("+document.documentElement.clientWidth+","+document.documentElement.clientHeight+")");
+
   let fruitIndex=Math.floor(Math.random()*total_list.length);
   let fruit = total_list[fruitIndex];
-  console.log("fruit:"+fruit);
   if (Array.prototype.includes.call(img_list,fruit)){
     fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
   }else{
     fruit.animate([{},{ backgroundColor: "#ef9702" },{}],{duration: 3000, iterations: Infinity});
   }
+  console.log("First fruit");
+  console.log("fruitIndex is: "+fruitIndex);
+  console.log("fruit is:"+fruit);
+  console.log("fruit in viewport:"+isInViewport(fruit));
+  console.log("fruit is: ("+fruit.getBoundingClientRect().left+","+fruit.getBoundingClientRect().top+")");
+
   let scoreElem;
 
   sketch.setup=function(){
@@ -191,18 +196,18 @@ var s= function(sketch){
 
 
   sketch.updateFruitCoordinates=function () {
-    console.log("fruit now is:"+fruit);
     fruitIndex = Math.floor(Math.random()*total_list.length);
     fruit = total_list[fruitIndex];
+    console.log("new fruit");
+    console.log("fruitIndex is: "+fruitIndex);
+    console.log("fruit is:"+fruit);
+    console.log("fruit in viewport:"+isInViewport(fruit));
+    console.log("fruit now is: ("+fruit.getBoundingClientRect().left+","+fruit.getBoundingClientRect().top+")");
     if (Array.prototype.includes.call(img_list,fruit)){
       fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
     }else{
       fruit.animate([{},{ backgroundColor: "#ef9702" },{}],{duration: 3000, iterations: Infinity});
     }
-    // xFruit = Math.floor(sketch.random(10, (sketch.width - 100) / 10)) * 10;
-    // yFruit = Math.floor(sketch.random(10, (sketch.height - 100) / 10)) * 10;
-    // console.log(xFruit,yFruit);
-    // console.log(sketch.width,sketch.height);
 
   }
 
@@ -212,26 +217,26 @@ var s= function(sketch){
       case 37:
         if (direction !== 'right') {
           direction = 'left';
-          console.log("left");
+          // console.log("left");
         }
         break;
       case 39:
         if (direction !== 'left') {
           direction = 'right';
-          console.log("right");
+          // console.log("right");
 
         }
         break;
       case 38:
         if (direction !== 'down') {
           direction = 'up';
-          console.log("up");
+          // console.log("up");
         }
         break;
       case 40:
         if (direction !== 'up') {
           direction = 'down';
-          console.log("down");
+          // console.log("down");
         }
         break;
       }
