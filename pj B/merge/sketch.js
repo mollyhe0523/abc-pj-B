@@ -172,17 +172,17 @@ var s= function(sketch){
     }
   }
   sketch.checkForFruit=function() {
-    let pixel = 5;
+    let r = 3;
     let x = xCor[xCor.length - 1];
     let y = yCor[yCor.length - 1];
     // collision detection: span
-      if ( ( ( y < fruit.getBoundingClientRect().top) && ( y > fruit.getBoundingClientRect().bottom) || ( y + pixel < fruit.getBoundingClientRect().bottom) && ( y + pixel > fruit.getBoundingClientRect().top) ) && ( (x >fruit.getBoundingClientRect().left) && (x < fruit.getBoundingClientRect().right) ||      (x+pixel <fruit.getBoundingClientRect().right) && (x+pixel > fruit.getBoundingClientRect().left) ) ) {
+      if ( ( ( y - r < fruit.getBoundingClientRect().top ) && ( y - r > fruit.getBoundingClientRect().bottom) || ( y + r < fruit.getBoundingClientRect().bottom) && ( y + r > fruit.getBoundingClientRect().top) ) && ( (x - r >fruit.getBoundingClientRect().left) && (x - r < fruit.getBoundingClientRect().right) ||      (x+r <fruit.getBoundingClientRect().right) && (x+r > fruit.getBoundingClientRect().left) ) ) {
         fruit.style.visibility = "hidden"; // hide the element once run into
         sketch.fruitEaten();
       }
 
     // collision detection: image
-        if ( ( ( y < fruit.getBoundingClientRect().top) && ( y > fruit.getBoundingClientRect().bottom) || ( y + pixel < fruit.getBoundingClientRect().bottom) && ( y + pixel > fruit.getBoundingClientRect().top) ) && ( (x >fruit.getBoundingClientRect().left) && (x < fruit.getBoundingClientRect().right) ||      (x+pixel <fruit.getBoundingClientRect().right) && (x+pixel > fruit.getBoundingClientRect().left) ) ) {
+        if ( ( ( y - r < fruit.getBoundingClientRect().top) && ( y - r > fruit.getBoundingClientRect().bottom) || ( y + r < fruit.getBoundingClientRect().bottom) && ( y + r > fruit.getBoundingClientRect().top) ) && ( (x - r >fruit.getBoundingClientRect().left) && (x - r < fruit.getBoundingClientRect().right) ||      (x+r <fruit.getBoundingClientRect().right) && (x+r > fruit.getBoundingClientRect().left) ) ) {
           fruit.style.visibility = "hidden"; // hide the element once run into
           sketch.fruitEaten();
       }
