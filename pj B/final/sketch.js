@@ -287,6 +287,10 @@ var s= function(sketch){
     }
   }
 }
+<<<<<<< HEAD:pj B/final/sketch.js
+=======
+
+>>>>>>> 7c9c734a2e4ca2c34717895fd0f28942b19e121a:pj B/merge/sketch.js
 let buffer = "";
 
 document.addEventListener('keypress', logKey);
@@ -301,6 +305,7 @@ function logKey(e) {
     // document.removeEventListener('keypress', logKey);
   }
 }
+<<<<<<< HEAD:pj B/final/sketch.js
 // function gotMessage(message,sender,sendResponse){
 //   console.log(message);
 //   if(message.type == "start"){
@@ -312,3 +317,5 @@ function logKey(e) {
 // }
 // }
 // chrome.runtime.onMessage.addListener(gotMessage);
+=======
+>>>>>>> 7c9c734a2e4ca2c34717895fd0f28942b19e121a:pj B/merge/sketch.js
