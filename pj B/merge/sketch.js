@@ -272,13 +272,14 @@ var s= function(sketch){
     }
   }
 }
-function gotMessage(message,sender,sendResponse){
-  console.log(message);
-  if(message.active == true ){
+
+let buffer = "";
+
+document.addEventListener('keypress', (e)=>{
+  if ( buffer.length < 5 ) {
+    buffer += e.key;
+  } else if ( buffer.slice(-5) == "snake") {
     go();
     let myp5 = new p5(s);
-    sendResponse( { activated: true } );
-    // var x = document.getElementById("myCanvas");
   }
-}
-chrome.runtime.onMessage.addListener(gotMessage);
+});
