@@ -274,12 +274,11 @@ var s= function(sketch){
 }
 function gotMessage(message,sender,sendResponse){
   console.log(message);
-  if(message.type == "start"){
+  if(message.active == true ){
     go();
     let myp5 = new p5(s);
+    sendResponse( { activated: true } );
     // var x = document.getElementById("myCanvas");
-  }else if(message.type == "stop"){
-    p5=null;
-}
+  }
 }
 chrome.runtime.onMessage.addListener(gotMessage);
