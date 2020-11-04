@@ -20,7 +20,7 @@
     }
   },
   "icons": {
-    "48": "icon/snake-36.png",
+    "48": "icon/snake-32.png",
     "128": "icon/snake-128.png"
   }
 }

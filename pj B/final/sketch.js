@@ -78,7 +78,7 @@ var s= function(sketch){
 
   const xStart = 0; // 蛇的初始 x 坐标
   // const yStart = 20;
-  const yStart = scrollTop + window.innerHeight- 60; //蛇的初始 y 坐标
+  const yStart = window.innerHeight- 60; //蛇的初始 y 坐标
   const diff = 10;
 
   let xCor = [];
@@ -237,19 +237,19 @@ var s= function(sketch){
 
 
   sketch.updateFruitCoordinates=function () {
-    let end = true;
+    // let end = true;
     fruitIndexNext = Math.floor(Math.random()*total_list.length);
     fruitNext = total_list[fruitIndexNext];
-    total_list.forEach((el, i) => {
-      if (el != undefined){
-        end = false;
-        // break;
-      }
-    });
-    if (end){
-      sketch.noLoop();
-      scoreElem.html('Congrats!!!! You win!');
-    }
+    // total_list.forEach((el, i) => {
+    //   if (el != undefined){
+    //     end = false;
+    //     // break;
+    //   }
+    // });
+    // if (end){
+    //   sketch.noLoop();
+    //   scoreElem.html('Congrats!!!! You win!');
+    // }
 
     while ((fruitNext == undefined) || (fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0) || (fruitNext.style.visibility == "hidden") || (fruitNext.style.display == "none") || (fruitNext.style.opacity == "0")){
       fruitIndexNext = Math.floor(Math.random()*total_list.length);
