@@ -88,7 +88,7 @@ var s= function(sketch){
   let fruitIndex=Math.floor(Math.random()*total_list.length);
   let fruit = total_list[fruitIndex];
 
-  while ((fruit.getBoundingClientRect().left==0) && (fruit.getBoundingClientRect().top==0) && (fruit.style.visibility == "hidden") && (fruit.style.display == "none") && (fruit.style.opacity == "0")){
+  while ((fruit.getBoundingClientRect().left==0) && (fruit.getBoundingClientRect().top==0) || (fruit.style.visibility == "hidden") || (fruit.style.display == "none") || (fruit.style.opacity == "0")){
     fruitIndex=Math.floor(Math.random()*total_list.length);
     fruit = total_list[fruitIndex];
   }
@@ -97,7 +97,7 @@ var s= function(sketch){
   let fruitIndexNext=Math.floor(Math.random()*total_list.length);
   let fruitNext = total_list[fruitIndexNext];
 
-  while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0) && (fruitNext.style.visibility == "hidden") && (fruitNext.style.display == "none") && (fruitNext.style.opacity == "0")){
+  while ((fruitNext == fruit) ||(fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0) || (fruitNext.style.visibility == "hidden") || (fruitNext.style.display == "none") || (fruitNext.style.opacity == "0")){
     fruitIndexNext=Math.floor(Math.random()*total_list.length);
     fruitNext = total_list[fruitIndexNext];
   }
@@ -207,9 +207,10 @@ var s= function(sketch){
 
   sketch.fruitEaten=function(){
     console.log("eat fruit!");
-    returned = total_list.splice(fruitIndex,1);
+    delete total_list[fruitIndex];
+    // returned = total_list.splice(fruitIndex,1);
     // console.log("spliced: ");
-    // console.log(returned);
+    // console.log(returned[0].innerHTML);
     console.log(total_list);
     const prevScore = parseInt(scoreElem.html().substring(8));
     scoreElem.html('Score = ' + (prevScore + 1));
@@ -233,10 +234,24 @@ var s= function(sketch){
 
 
   sketch.updateFruitCoordinates=function () {
+    let end = true;
     fruitIndexNext = Math.floor(Math.random()*total_list.length);
     fruitNext = total_list[fruitIndexNext];
-    while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0) && (fruitNext.style.visibility == "hidden") && (fruitNext.style.display == "none") && (fruitNext.style.opacity == "0")){
-      sketch.updateFruitCoordinates;
+    total_list.forEach((el, i) => {
+      if (el != undefined){
+        end = false;
+        // break;
+      }
+    });
+    if (end){
+      sketch.noLoop();
+      scoreElem.html('Congrats!!!! You win!');
+    }
+
+    while ((fruitNext == undefined) || (fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0) || (fruitNext.style.visibility == "hidden") || (fruitNext.style.display == "none") || (fruitNext.style.opacity == "0")){
+      fruitIndexNext = Math.floor(Math.random()*total_list.length);
+      fruitNext = total_list[fruitIndexNext];
+      console.log("GETTING A NEW FRUIT!");
     }
   }
 
@@ -272,14 +287,28 @@ var s= function(sketch){
     }
   }
 }
-function gotMessage(message,sender,sendResponse){
-  console.log(message);
-  if(message.type == "start"){
+let buffer = "";
+
+document.addEventListener('keypress', logKey);
+
+function logKey(e) {
+  console.log( "input: " + e.key );
+  buffer += e.key;
+  if ( buffer.slice(-5) == "snake") {
+    console.log("snake activated");
     go();
     let myp5 = new p5(s);
-    // var x = document.getElementById("myCanvas");
-  }else if(message.type == "stop"){
-    p5=null;
+    // document.removeEventListener('keypress', logKey);
+  }
 }
-}
-chrome.runtime.onMessage.addListener(gotMessage);
+// function gotMessage(message,sender,sendResponse){
+//   console.log(message);
+//   if(message.type == "start"){
+//     go();
+//     let myp5 = new p5(s);
+//     // var x = document.getElementById("myCanvas");
+//   }else if(message.type == "stop"){
+//     p5=null;
+// }
+// }
+// chrome.runtime.onMessage.addListener(gotMessage);
