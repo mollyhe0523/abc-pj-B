@@ -18,31 +18,43 @@ function go(){
   });
 
   // find word list
-    // find p list
-    p_list = document.querySelectorAll("p");
-    // turn p into spans, creds: leoneckert, "text-rain"
-    p_list.forEach((p_el, i) => {
-      // find words in p element
-      let text = p_el.textContent;
-      // empty p element
-      p_el.textContent = "";
-      // split words into spans and give it back to p element
-      let words = text.split(" ");
-      words.forEach((word, i) => {
-        let wordspan = document.createElement("span");
-        wordspan.textContent = word + " ";
-        p_el.appendChild(wordspan);
-      });
-    });
+  // find p list
+  findAndReplaceDOMText(document.body, {
+    find: /(\w[+#]+|\w+)/g,
+    wrap: "span",
+    wrapClass: "myWords"
+  })
+  words = document.getElementsByClassName("myWords");
+  for (span_el of words) {
+      if (isInViewport(span_el) && (span_el.getBoundingClientRect().left != span_el.getBoundingClientRect().right) && (span_el.getBoundingClientRect().top != span_el.getBoundingClientRect().bottom)){
+        total_list.push(span_el);
+      };
+  }
+  // console.log(span_list);
 
-  // find span list and append to total list
-  span_list = document.querySelectorAll("span");
-  console.log(span_list);
-  span_list.forEach((span_el, i) => {
-    if (isInViewport(span_el) && (span_el.getBoundingClientRect().left != span_el.getBoundingClientRect().right) && (span_el.getBoundingClientRect().top != span_el.getBoundingClientRect().bottom)){
-      total_list.push(span_el);
-    }
-  });
+  // // turn p into spans, creds: leoneckert, "text-rain"
+  // p_list.forEach((p_el, i) => {
+  //   // find words in p element
+  //   let text = p_el.textContent;
+  //   // empty p element
+  //   p_el.textContent = "";
+  //   // split words into spans and give it back to p element
+  //   let words = text.split(" ");
+  //   words.forEach((word, i) => {
+  //     let wordspan = document.createElement("span");
+  //     wordspan.textContent = word + " ";
+  //     p_el.appendChild(wordspan);
+  //   });
+  // });
+  //
+  // // find span list and append to total list
+  // span_list = document.querySelectorAll("span");
+  // console.log(span_list);
+  // span_list.forEach((span_el, i) => {
+  //   if (isInViewport(span_el) && (span_el.getBoundingClientRect().left != span_el.getBoundingClientRect().right) && (span_el.getBoundingClientRect().top != span_el.getBoundingClientRect().bottom)){
+  //     total_list.push(span_el);
+  //   }
+  // });
 
 }
 
@@ -76,7 +88,7 @@ var s= function(sketch){
   let fruitIndex=Math.floor(Math.random()*total_list.length);
   let fruit = total_list[fruitIndex];
 
-  while ((fruit.getBoundingClientRect().left==0) && (fruit.getBoundingClientRect().top==0)){
+  while ((fruit.getBoundingClientRect().left==0) && (fruit.getBoundingClientRect().top==0) && (fruit.style.visibility == "hidden") && (fruit.style.display == "none") && (fruit.style.opacity == "0")){
     fruitIndex=Math.floor(Math.random()*total_list.length);
     fruit = total_list[fruitIndex];
   }
@@ -85,7 +97,7 @@ var s= function(sketch){
   let fruitIndexNext=Math.floor(Math.random()*total_list.length);
   let fruitNext = total_list[fruitIndexNext];
 
-  while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0)){
+  while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0) && (fruitNext.style.visibility == "hidden") && (fruitNext.style.display == "none") && (fruitNext.style.opacity == "0")){
     fruitIndexNext=Math.floor(Math.random()*total_list.length);
     fruitNext = total_list[fruitIndexNext];
   }
@@ -196,8 +208,9 @@ var s= function(sketch){
   sketch.fruitEaten=function(){
     console.log("eat fruit!");
     returned = total_list.splice(fruitIndex,1);
-    console.log("spliced: ");
-    console.log(returned);
+    // console.log("spliced: ");
+    // console.log(returned);
+    console.log(total_list);
     const prevScore = parseInt(scoreElem.html().substring(8));
     scoreElem.html('Score = ' + (prevScore + 1));
     xCor.unshift(xCor[0]);
@@ -222,7 +235,7 @@ var s= function(sketch){
   sketch.updateFruitCoordinates=function () {
     fruitIndexNext = Math.floor(Math.random()*total_list.length);
     fruitNext = total_list[fruitIndexNext];
-    while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0)){
+    while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0) && (fruitNext.style.visibility == "hidden") && (fruitNext.style.display == "none") && (fruitNext.style.opacity == "0")){
       sketch.updateFruitCoordinates;
     }
   }
