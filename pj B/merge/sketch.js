@@ -191,21 +191,19 @@ var s= function(sketch){
         fruit.style.visibility = "hidden"; // hide the element once run into
         sketch.fruitEaten();
       }
-
-    // collision detection: image
-        if ( ( ( y - r < fruit.getBoundingClientRect().top) && ( y - r > fruit.getBoundingClientRect().bottom) || ( y + r < fruit.getBoundingClientRect().bottom) && ( y + r > fruit.getBoundingClientRect().top) ) && ( (x - r >fruit.getBoundingClientRect().left) && (x - r < fruit.getBoundingClientRect().right) ||      (x+r <fruit.getBoundingClientRect().right) && (x+r > fruit.getBoundingClientRect().left) ) ) {
-          fruit.style.visibility = "hidden"; // hide the element once run into
-          sketch.fruitEaten();
-      }
   }
+
   sketch.fruitEaten=function(){
     console.log("eat fruit!");
-    total_list.splice(fruitIndex,1);
+    returned = total_list.splice(fruitIndex,1);
+    console.log("spliced: ");
+    console.log(returned);
     const prevScore = parseInt(scoreElem.html().substring(8));
     scoreElem.html('Score = ' + (prevScore + 1));
     xCor.unshift(xCor[0]);
     yCor.unshift(yCor[0]);
     numSegments++;
+    fruitIndex = fruitIndexNext;
     fruit = fruitNext;
     if (Array.prototype.includes.call(img_list,fruit)){
       fruit.animate([{},{ boxShadow: "#ef9702 0px 0px 5px, #ef9702 0px 0px 10px, #ef9702 0px 0px 15px, #ef9702 0px 0px 20px, #ef9702 0px 0px 30px, #ef9702 0px 0px 10px, #ef9702 0px 0px 50px, #ef9702 0px 0px 75px" },{}],{duration: 3000, iterations: Infinity});
@@ -227,7 +225,6 @@ var s= function(sketch){
     while ((fruitNext.getBoundingClientRect().left==0) && (fruitNext.getBoundingClientRect().top==0)){
       sketch.updateFruitCoordinates;
     }
-    // console.log(total_list);
   }
 
 
@@ -266,7 +263,7 @@ function gotMessage(message,sender,sendResponse){
   console.log(message);
   if(message.type == "start"){
     go();
-    var myp5 = new p5(s);
+    let myp5 = new p5(s);
     // var x = document.getElementById("myCanvas");
   }else if(message.type == "stop"){
     p5=null;
