@@ -12,7 +12,7 @@
   "content_scripts":[
     {
       "matches": ["<all_urls>"],
-      "js":["p5.js","sketch.js"]
+      "js":["p5.js","sketch.js","findAndReplaceDomText.js"]
     }
   ],
   "background": {
