@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Greedy Snake",
+  "name": "Molly & Yuhang | Greedy Snake",
   "version": "1.0",
   "author": "Molly & Yuhang",
-  "description": "Press arrow keys and let the greedy snake eat as many HTML elements as possible!",
+  "description": "Enter 'snake' to wake the greedy snake and press arrow keys to control its movement. Have fun!",
 
   "permissions":[
     "activeTab"
