@@ -275,11 +275,16 @@ var s= function(sketch){
 
 let buffer = "";
 
-document.addEventListener('keypress', (e)=>{
-  if ( buffer.length < 5 ) {
-    buffer += e.key;
-  } else if ( buffer.slice(-5) == "snake") {
-    go();
-    let myp5 = new p5(s);
-  }
-});
+document.addEventListener('keypress', logKey);
+
+function logKey(e) {
+  console.log( "input: " + e.key );
+  buffer += e.key;
+}
+
+if ( buffer.slice(-5) == "snake") {
+  console.log("snake activated")
+  go();
+  let myp5 = new p5(s);
+  document.removeEventListener('keypress', logKey);
+}
