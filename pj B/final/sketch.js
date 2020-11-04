@@ -77,7 +77,8 @@ var s= function(sketch){
   let direction = 'right';
 
   const xStart = 0; // 蛇的初始 x 坐标
-  const yStart = 20; //蛇的初始 y 坐标
+  // const yStart = 20;
+  const yStart = scrollTop + window.innerHeight- 60; //蛇的初始 y 坐标
   const diff = 10;
 
   let xCor = [];
@@ -117,10 +118,12 @@ var s= function(sketch){
 
   sketch.setup=function(){
     scoreElem = sketch.createDiv('Score = 0');
-    scoreElem.position(scrollLeft+20, scrollTop);
+    scoreElem.position(scrollLeft+20, scrollTop+window.innerHeight-40);
     scoreElem.id = 'score';
-    scoreElem.style('color', 'orange');
-    scoreElem.style('z-index','100');
+    scoreElem.style('font-size', '20px');
+    scoreElem.style('background-color', 'orange');
+    scoreElem.style('color', 'white');
+    scoreElem.style('z-index','10000');
 
 
     let c=sketch.createCanvas(sketch.windowWidth,sketch.windowHeight);
@@ -287,10 +290,6 @@ var s= function(sketch){
     }
   }
 }
-<<<<<<< HEAD:pj B/final/sketch.js
-=======
-
->>>>>>> 7c9c734a2e4ca2c34717895fd0f28942b19e121a:pj B/merge/sketch.js
 let buffer = "";
 
 document.addEventListener('keypress', logKey);
@@ -305,7 +304,6 @@ function logKey(e) {
     // document.removeEventListener('keypress', logKey);
   }
 }
-<<<<<<< HEAD:pj B/final/sketch.js
 // function gotMessage(message,sender,sendResponse){
 //   console.log(message);
 //   if(message.type == "start"){
@@ -317,5 +315,3 @@ function logKey(e) {
 // }
 // }
 // chrome.runtime.onMessage.addListener(gotMessage);
-=======
->>>>>>> 7c9c734a2e4ca2c34717895fd0f28942b19e121a:pj B/merge/sketch.js
