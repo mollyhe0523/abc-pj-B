@@ -284,6 +284,6 @@ function logKey(e) {
     console.log("snake activated");
     go();
     let myp5 = new p5(s);
-    document.removeEventListener('keypress', logKey);
+    // document.removeEventListener('keypress', logKey);
   }
 }
