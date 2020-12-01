@@ -2,7 +2,6 @@ let express =require('express');
 var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-let userCount = 0;
 
 var firebase = require('firebase');
 var firebaseConfig = {
@@ -17,16 +16,24 @@ var firebaseConfig = {
 };
 let firebaseApp = firebase.initializeApp(firebaseConfig);
 let database = firebase.database()
+var paperListRef = database.ref("paperList");
 var messageListRef = database.ref("papers");
-// var newPostRef = messageListRef.push("HELLO");
-// newPostRef.set({
-//
+// paperListRef.set({
+//   count:0
 // })
-
 
 app.use(express.static('public'));
 
+
 io.on('connection', (socket) => {
+  console.log('a user connected',socket.id);
+
+  //Beginning: get data history
+  paperListRef.once('value').then((snapshot)=>{
+    let archivalData = snapshot.val();
+    socket.emit('paper-list-data',archivalData.count);
+  })
+
   messageListRef.once('value').then((snapshot)=>{
     console.log(snapshot.val());
     let archivalData = snapshot.val();
@@ -34,10 +41,21 @@ io.on('connection', (socket) => {
   })
 
 
-  console.log('a user connected',socket.id);
-  userCount ++;
-  io.emit('new-user-count', {count: userCount});
+  //deal with paper list, userful for tracking available paper
+  socket.on('new-paper', () => {
+    paperListRef.once('value').then((snapshot)=>{
+      let paperCount = snapshot.val().count;
+      paperCount++;
+      let paperName = "p"+paperCount;
+      paperListRef.update({
+        count: paperCount,
+      })
+      paperListRef.push({paperName:paperName, active: "y"})
+      io.emit("new-paper-to-all",paperCount);
+    })
+  });
 
+  //record message to database, broadcast
   socket.on('message-from-one', (msg) => {
     messageListRef.push(msg);
     io.emit("message-to-all",msg);
@@ -45,8 +63,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('user disconnected',socket.id);
-    userCount --;
-    io.emit('new-user-count', {count: userCount})
   });
 });
 

@@ -1,58 +1,94 @@
 console.log("hi");
 
 let socket = io();
-// let namebox = document.getElementById('name');
-// let chatbox = document.getElementById('chat');
+let radioWrapper = document.getElementById('radioWrapper');
+let paperWrapper = document.getElementById('paperWrapper');
 let messagebox = document.getElementById('message');
 let red = document.getElementById('red');
 let blue = document.getElementById('blue');
-let p1 = document.getElementById('p1');
+let paperRadio = document.getElementsByName("paper");
+let newButton = document.getElementById('newButton');
 let sendbutton = document.getElementById('send');
-// let usercount = document.getElementById("usercount");
 let color = "black";
+let paper = "p1";
 
+//write text onto my paper (determining style)
 sendbutton.addEventListener("click",()=>{
-  console.log(red.checked);
   if (red.checked == true){
     color = "red";
   }else if (blue.checked == true){
     color = "blue";
   }
-
+  for(i = 0; i < paperRadio.length; i++) {
+      if(paperRadio[i].checked){
+        paper = paperRadio[i].value;
+      }
+  }
+  console.log(paper);
   let message = messagebox.value.trim();
   if (message != ""){
-    let data = {message: message, color: color};
+    let data = {paper: paper, color: color,message: message};
     socket.emit('message-from-one',data);
-    // console.log(data);
   }
   messagebox.value = "";
-})
+});
 
-// function updateUserCount (data){
-//   let count = data.count;
-//   usercount.innerHTML = count-1;
-// }
-
+//update others' message on paper
 socket.on("message-to-all",(data)=>{
   console.log(data);
+  let paper = data.paper;
   let color= data.color;
   let message = data.message;
-  appendMessage(color,message);
+  appendMessage(paper,color,message);
 })
 
-function appendMessage(color,message){
+
+
+//add new paper
+newButton.addEventListener("click",()=>{
+  socket.emit("new-paper");
+})
+
+socket.on("new-paper-to-all",(count)=>{
+  appendPaper(count);
+})
+
+
+function appendMessage(paper,color,message){
   let div = document.createElement("div");
   let p = document.createElement("p");
   p.innerHTML = message;
   div.style.color = color;
   div.appendChild(p);
-  p1.appendChild(div);
-  // chatbox.scrollTop = chatbox.scrollHeight;
+  document.getElementById(paper).appendChild(div);
 }
 
-// socket.on('new-user-count',(data)=>{
-//   updateUserCount(data);
-// })
+
+function appendPaper(i){
+  let newDiv = document.createElement("div");
+  newDiv.id = "p"+ i;
+  newDiv.className = "paper";
+  newDiv.innerHTML = "PAPER "+i;
+  newDiv.style.cssText = "height: 100px"
+  paperWrapper.appendChild(newDiv);
+  let newInput = document.createElement("input");
+  newInput.id = "p" + i + "-r";
+  newInput.value = "p" + i;
+  newInput.type = "radio";
+  newInput.name = "paper";
+  radioWrapper.appendChild(newInput);
+  radioWrapper.innerHTML += "paper "+i+" ";
+}
+
+
+//Beginning: get data history
+socket.on('paper-list-data',(count)=>{
+  if (count!=null){
+    for (let i=1; i<=count; i++){
+      appendPaper(i);
+    }
+  }
+})
 
 socket.on('archival-data',(data)=>{
   if (data!=null){
@@ -60,11 +96,12 @@ socket.on('archival-data',(data)=>{
     for(let i=0; i<keys.length; i++){
       let key = keys[i];
       let datapoint = data[key];
-      appendMessage(datapoint.color,datapoint.message);
+      appendMessage(datapoint.paper,datapoint.color,datapoint.message);
     }
   }
 })
 
+//trivial functionality
 messagebox.addEventListener("keyup",(event)=>{
   if (event.keyCode == 13){
     sendbutton.click();

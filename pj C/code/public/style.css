@@ -1,5 +1,6 @@
-#p1-t1{
-  /* color:red; */
+.paper{
+  border:4px solid black;
+  border-radius: 4px;
 }
 
 
