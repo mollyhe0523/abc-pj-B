@@ -10,12 +10,10 @@ function handlePaperClick() {
   showConfig();
 }
 
-
-
 function createTextbox() {
-  let textbox = document.createElement("input");
+  let textbox = document.createElement("textarea");
   // textbox is resizable
-  textbox.style.cssText = "type: text; border: 2px solid; padding: 20px; width: 300px; resize: both; overflow: hidden;"
+  textbox.style.cssText = "background-color: transparent; border: 2px solid; font: Times; padding: 20px; width: 300px; resize: both; overflow: hidden;"
   // textbox is draggable
 
   // append textbox to paper
