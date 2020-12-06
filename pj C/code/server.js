@@ -18,9 +18,9 @@ let firebaseApp = firebase.initializeApp(firebaseConfig);
 let database = firebase.database()
 var paperListRef = database.ref("paperList");
 var messageListRef = database.ref("papers");
-// paperListRef.set({
-//   count:0
-// })
+paperListRef.set({
+  count:0
+})
 
 app.use(express.static('public'));
 
