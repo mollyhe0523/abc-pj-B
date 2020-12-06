@@ -1,20 +1,17 @@
 console.log("hi");
-let noteId = 0;
-
-let textbox = document.getElementById("paper");
-
 let paper = document.getElementById("paper");
-let config = document.getElementById("config-container");
-let btnSubmit = document.getElementById("btnSubmit");
+let noteId = 0; // keep track of the numbder of notes
+let textbox = document.getElementById("paper"); // will be redeclared later
 
+let config = document.getElementById("config-container");
 let inputColor = document.getElementById("input-color");
 let inputSize = document.getElementById("input-size");
+let btnSubmit = document.getElementById("btnSubmit");
+
+let borderWidth = 1;
 
 paper.addEventListener("click", handlePaperClick);
 
-btnSubmit.addEventListener("click", () => {
-  submit();
-});
 inputColor.addEventListener("input", () => {
   textbox.style.color = inputColor.value;
 });
@@ -22,117 +19,149 @@ inputSize.addEventListener("input", () => {
   textbox.style.fontSize = inputSize.value + "px";
 });
 
+btnSubmit.addEventListener("click", () => {
+  submit();
+  resetConfig();
+  hideConfig();
+  resetPaper();
+});
+
 function handlePaperClick(e) {
   noteId += 1;
   x = e.clientX;
   y = e.clientY;
-  createTextbox(x, y);
+  createTextbox(x, y, noteId);
   paper.removeEventListener("click", handlePaperClick);
+  resetConfig();
   showConfig();
 }
 
-function createTextbox(x, y) {
+function createTextbox(x, y, noteId) {
   textbox = document.createElement("textarea");
   textbox.id = "textbox" + noteId;
-  // textbox is resizable
-  textbox.style.cssText = "position: absolute; top: "+y+"px; height: "+x+"px; cursor: move; background-color: transparent; border: 2px solid; padding: 20px; width: 300px; resize: both; overflow: hidden; font-size: 12px"
-  // textbox is draggable
-
-  // append textbox to paper
+  // width: 100%;
+  // height: 150px;
+  // padding: 12px 20px;
+  // box-sizing: border-box;
+  // border: 2px solid #ccc;
+  // border-radius: 4px;
+  // background-color: #f8f8f8;
+  // font-size: 16px;
+  // resize: both;
+  textbox.style.cssText = "position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid #ccc; border-radius: 4px; padding: 0px; width: 300px; resize: both; overflow: hidden; font-size: 12px; font-family: Helvetica" // style needs change
   paper.appendChild(textbox);
-  initDrag(textbox);
+  textbox.addEventListener("mousedown", initDrag);
+  // https://www.w3schools.com/howto/howto_js_draggable.asp
 }
 
 function showConfig() {
-  // let btnSubmit = document.createElement("button");
-  // btnSubmit.id = "btnSubmit";
-  // btnSubmit.innerHTML = "submit";
-  // btnSubmit.style.cssText = "position: absolute; cursor: pointer; background-color: white; border: 2px solid; padding: 20px; height: 50px; width: 100px";
-  // config.appendChild(btnSubmit);
-
   config.style.visibility = "visible";
-
+}
+function hideConfig() {
+  config.style.visibility = "hidden";
+}
+function resetConfig() {
+  inputColor.value = "#000000";
+  inputSize.value = 12;
 }
 
-function initDrag(el) {
-  // https://www.w3schools.com/howto/howto_js_draggable.asp
+function resetPaper() {
+  paper.addEventListener("click", handlePaperClick);
+}
 
+function initDrag(e) {
+  el = textbox;
   console.log("initDrag");
-  // Make the DIV element draggable:
-  dragElement(el);
-
-  function dragElement(el) {
-    console.log("dragElement");
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    if (document.getElementById(el.id + "header")) {
-      // if present, the header is where you move the DIV from:
-      document.getElementById(el.id + "header").onmousedown = dragMouseDown;
-    } else {
-      // otherwise, move the DIV from anywhere inside the DIV:
-      el.addEventListener("mousedown", dragMouseDown)
-    }
-
-    function dragMouseDown(e) {
-      console.log("dragMouseDown");
-      e = e || window.event;
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.body.addEventListener("mouseup", closeDragElement);
-      el.addEventListener("mouseup", closeDragElement);
-
-      // el.addEventListener("mouseleave", closeDragElement);
-      // document.onmouseup = closeDragElement;
-
-      // call a function whenever the cursor moves:
-      document.body.addEventListener("mousemove", elementDrag)
-      el.addEventListener("mousemove", elementDrag)
-
-      // document.onmousemove = elementDrag;
-    }
-
-    function elementDrag(e) {
-      console.log("elementDrag");
-      e = e || window.event;
-      e.preventDefault();
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      // set the element's new position:
-      el.style.top = (el.offsetTop - pos2) + "px";
-      el.style.left = (el.offsetLeft - pos1) + "px";
-    }
-
-    function closeDragElement() {
-      console.log("closeDragElement");
-      // stop moving when mouse button is released:
-      // el.removeEventListener("mouseup", (e) => {
-      //   closeDragElement(e)
-      // });
-      el.removeEventListener("mousemove", elementDrag);
-      document.body.removeEventListener("mousemove", elementDrag);
-      document.body.removeEventListener("mouseup", closeDragElement);
-      el.removeEventListener("mouseup", closeDragElement);
-      // document.onmouseup = null;
-      // document.onmousemove = null;
-    }
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  // move the DIV from anywhere inside the DIV:
+  if (!(( (el.offsetTop + el.offsetHeight - e.clientY) <= 10) && ( (el.offsetLeft + el.offsetWidth - e.clientX) <= 10) ))
+  {
+    el.addEventListener("mousedown", dragMouseDown);
   }
 }
 
-function submit() {
-console.log("color:" + inputColor.value + "; font-size:" + inputSize.value + "px; position: absolute; top: " + textbox.offsetTop + "px; left:" + textbox.offsetLeft + "px;")
+function dragMouseDown(e) {
+  el = textbox;
+  console.log("dragMouseDown");
+  e = e || window.event;
+  // get the mouse cursor position at startup:
+  pos3 = e.clientX;
+  pos4 = e.clientY;
+  if (!(( (el.offsetTop + el.offsetHeight - e.clientY) <= 10) && ( (el.offsetLeft + el.offsetWidth - e.clientX) <= 10) )) {
+    document.body.addEventListener("mousemove", elementDrag);
+    el.addEventListener("mousemove", elementDrag);
 
-  // let text = document.createElement("textarea");
+    document.body.addEventListener("mouseup", closeDragElement);
+    el.addEventListener("mouseup", closeDragElement);
+  }
+
+
+
+  // el.addEventListener("mouseleave", closeDragElement);
+  // document.onmouseup = closeDragElement;
+  // document.onmousemove = elementDrag;
+}
+
+function elementDrag(e) {
+  el = textbox;
+  console.log("elementDrag");
+  e = e || window.event;
+  e.preventDefault();
+  // calculate the new cursor position:
+  pos1 = pos3 - e.clientX;
+  pos2 = pos4 - e.clientY;
+  pos3 = e.clientX;
+  pos4 = e.clientY;
+  console.log("clientX: "+pos3+" clientY:"+pos4);
+  // set the element's new position:
+  el.style.top = (el.offsetTop - pos2) + "px";
+  el.style.left = (el.offsetLeft - pos1) + "px";
+}
+
+function closeDragElement() {
+  el = textbox;
+  console.log("closeDragElement");
+  // stop moving when mouse button is released:
+  // el.removeEventListener("mouseup", (e) => {
+  //   closeDragElement(e)
+  // });
+  el.removeEventListener("mousemove", elementDrag);
+  document.body.removeEventListener("mousemove", elementDrag);
+  // document.body.removeEventListener("mouseup", closeDragElement);
+  // el.removeEventListener("mouseup", closeDragElement);
+  // document.onmouseup = null;
+  // document.onmousemove = null;
+}
+
+
+function submit() {
+  console.log("color:" + inputColor.value + "; font-size:" + inputSize.value + "px; position: absolute; top: " + textbox.offsetTop + "px; left:" + textbox.offsetLeft + "px;");
+
+  // text = document.createElement("textarea");
   // text.innerHTML = textbox.value;
   // text.style.cssText = "color:" + inputColor.value + "; font-size:" + inputSize.value + "px; position: absolute; top: " + textbox.offsetTop + "px; left:" + textbox.offsetLeft + "px;";
   // paper.appendChild(text);
   // paper.removeChild(textbox);
   // text.readonly = true;
-  // // textbox.style.resize = "none";
-  // // textbox.style.cursor = "auto";
-  // inputColor.value = "#000000";
-  // inputSize.value = 12;
-  // paper.addEventListener("click", handlePaperClick);
+  textbox.style.resize = "none";
+  textbox.style.cursor = "auto";
+  textbox.readOnly = true;
+
+  textbox.style.border = "0";
+  textbox.style.top = textbox.offsetTop + borderWidth + "px";
+  textbox.style.left = textbox.offsetLeft + borderWidth + "px";
+
+  textbox.removeEventListener("mousedown", dragMouseDown);
+  document.body.removeEventListener("mouseup", closeDragElement);
+  textbox.removeEventListener("mouseup", closeDragElement);
+
+  let pctPosX = ( textbox.offsetLeft - paper.offsetLeft ) / paper.offsetWidth;
+  let pctPosY = ( textbox.offsetTop - paper.offsetTop ) / paper.offsetHeight;
+
+  paper.style.top = paper.offsetTop + 10 + "px";
+  paper.style.left = paper.offsetLeft; + 10 + "px";
+
+  textbox.style.top = paper.offsetTop + pctPosX + "px";
+  textbox.style.left = paper.offsetLeft; + pctPosY + "px";
+
 }
