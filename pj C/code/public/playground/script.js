@@ -15,27 +15,27 @@ paper.addEventListener("click", handlePaperClick);
 btnSubmit.addEventListener("click", () => {
   submit();
 });
-
 inputColor.addEventListener("input", () => {
   textbox.style.color = inputColor.value;
 });
-
 inputSize.addEventListener("input", () => {
   textbox.style.fontSize = inputSize.value + "px";
 });
 
-function handlePaperClick() {
+function handlePaperClick(e) {
   noteId += 1;
-  createTextbox();
+  x = e.clientX;
+  y = e.clientY;
+  createTextbox(x, y);
   paper.removeEventListener("click", handlePaperClick);
   showConfig();
 }
 
-function createTextbox() {
+function createTextbox(x, y) {
   textbox = document.createElement("textarea");
   textbox.id = "textbox" + noteId;
   // textbox is resizable
-  textbox.style.cssText = "position: absolute; cursor: move; background-color: transparent; border: 2px solid; padding: 20px; width: 300px; resize: both; overflow: hidden; font-size: 12px"
+  textbox.style.cssText = "position: absolute; top: "+y+"px; height: "+x+"px; cursor: move; background-color: transparent; border: 2px solid; padding: 20px; width: 300px; resize: both; overflow: hidden; font-size: 12px"
   // textbox is draggable
 
   // append textbox to paper
@@ -78,12 +78,16 @@ function initDrag(el) {
       // get the mouse cursor position at startup:
       pos3 = e.clientX;
       pos4 = e.clientY;
+      document.body.addEventListener("mouseup", closeDragElement);
       el.addEventListener("mouseup", closeDragElement);
-      el.addEventListener("mouseleave", closeDragElement);
+
+      // el.addEventListener("mouseleave", closeDragElement);
       // document.onmouseup = closeDragElement;
 
       // call a function whenever the cursor moves:
+      document.body.addEventListener("mousemove", elementDrag)
       el.addEventListener("mousemove", elementDrag)
+
       // document.onmousemove = elementDrag;
     }
 
@@ -108,6 +112,9 @@ function initDrag(el) {
       //   closeDragElement(e)
       // });
       el.removeEventListener("mousemove", elementDrag);
+      document.body.removeEventListener("mousemove", elementDrag);
+      document.body.removeEventListener("mouseup", closeDragElement);
+      el.removeEventListener("mouseup", closeDragElement);
       // document.onmouseup = null;
       // document.onmousemove = null;
     }
@@ -115,12 +122,17 @@ function initDrag(el) {
 }
 
 function submit() {
-  text = document.createElement("p");
-  text.innerHTML = textbox.value;
-  text.style.cssText = "color:" + inputColor.value + "; font-size:" + inputSize.value + "px; position: absolute; top: " + textbox.offsetTop + "px; left:" + textbox.offsetLeft + "px;";
-  paper.appendChild(text);
-  paper.removeChild(textbox);
-  inputColor.value = "#ffffff";
-  inputSize.value = 12;
-  paper.addEventListener("click", handlePaperClick);
+console.log("color:" + inputColor.value + "; font-size:" + inputSize.value + "px; position: absolute; top: " + textbox.offsetTop + "px; left:" + textbox.offsetLeft + "px;")
+
+  // let text = document.createElement("textarea");
+  // text.innerHTML = textbox.value;
+  // text.style.cssText = "color:" + inputColor.value + "; font-size:" + inputSize.value + "px; position: absolute; top: " + textbox.offsetTop + "px; left:" + textbox.offsetLeft + "px;";
+  // paper.appendChild(text);
+  // paper.removeChild(textbox);
+  // text.readonly = true;
+  // // textbox.style.resize = "none";
+  // // textbox.style.cursor = "auto";
+  // inputColor.value = "#000000";
+  // inputSize.value = 12;
+  // paper.addEventListener("click", handlePaperClick);
 }
