@@ -34,10 +34,26 @@ io.on('connection', (socket) => {
     socket.emit('paper-list-data',archivalData.count);
   })
 
-  messageListRef.once('value').then((snapshot)=>{
-    console.log(snapshot.val());
-    let archivalData = snapshot.val();
-    socket.emit('archival-data',archivalData);
+  socket.on('get-content', (paper) =>{
+    messageListRef.once('value').then((snapshot)=>{
+      // console.log(snapshot.val());
+      let archivalData = snapshot.val();
+      if (archivalData != null){
+        let keys=Object.keys(archivalData);
+        var paperData=[];
+        for(let i=0; i<keys.length; i++){
+          let key = keys[i];
+          let datapoint = archivalData[key];
+          // console.log(datapoint);
+          if (datapoint.paper==paper){
+            paperData.push(datapoint)
+          }
+        }
+        console.log("emitted archival-data");
+        socket.emit('archival-data',paperData);
+      }
+    })
+
   })
 
 

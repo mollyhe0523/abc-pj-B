@@ -6,24 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-
     <div id="wrapper">
-      <div id="radioWrapper">
+
+      <div id="bgWrapper">
+        <img id="bg" src="img/grass1.jpg" alt="">
+        <button type="button" id="rollButton">Add new paper</button> <br>
+
       </div>
 
-      <div id="paperWrapper">
+      <div id="notesgroundWrapper">
+        <!-- <img id="p1" class="folded" src="img/folded.png" alt=""> -->
       </div>
 
-      <div class="messageWrapper">
-        <input type="radio" id="red" name="color">red <input type="radio" id="blue" name="color">blue
-        <br>
-        <input type="text" id="message" autocomplete="off" placeholder="input text here"> <button id="send">Send</button>
+
+      <div id="writingPage">
+        <input type="text" id="message" autocomplete="off" placeholder="input text here">
+
+        <div id="paperWrapper">
+          <div id="content">
+            <!-- <div class="textDiv" style="left:60vw">
+              <p>ofjsdof</p>
+            </div>
+            <div class="textDiv">
+              <p>ofjsdof</p>
+            </div> -->
+          </div>
+          <img id="crumbled" src="img/crumbled.jpg" alt="">
+        </div>
+        <div id="configWrapper">
+          <button type="button" id="closeButton">X</button>
+
+          <div class="config" id="config-color">
+            <input type="color" id="input-color" value="#000000">
+          </div>
+          <div class="config" id="config-font">
+            <select id="select-font">
+              <option value="sans-serif">Sans-serif </option>
+              <option value="cursive">Cursive</option>
+              <option value="fantasy">Fantasy</option>
+            </select>
+          </div>
+          <div class="config" id="config-size">
+            <input type="range" id="input-size" value="12" min="3" max="48">
+          </div>
+
+          <button type="button" id="sendButton">Send</button>
+
+        </div>
       </div>
-
-      <br>
-      <button type="button" id="newButton">Create new paper</button>
-
     </div>
+
 
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="script.js"></script>
