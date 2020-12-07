@@ -139,7 +139,7 @@ html, body{
   position: absolute;
   right:0;
 }
-#input-color, #select-font, #input-size{
+#config-color, #config-font, #config-size{
   margin-top: 90px;
 }
 #input-size{
