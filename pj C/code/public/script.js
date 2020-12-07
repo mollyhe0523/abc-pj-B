@@ -18,7 +18,6 @@ let noteId = 0;
 let state = "p1"
 let paperCount = 1;
 
-paper.addEventListener("click", handlePaperClick);
 
 color.addEventListener("input", () => {
   textbox.style.color = color.value;
@@ -33,21 +32,17 @@ font.addEventListener("input", () => {
 function handlePaperClick(e) {
   console.log("handlePaperClick")
   noteId += 1;
-  x=e.clientX
-  y=e.clientY
-  // x = ((e.clientX/window.innerWidth-0.1) * window.innerWidth);
-  // y = ((e.clientY/window.innerHeight-0.1) * window.innerHeight);
+  x = e.clientX - paper.offsetLeft;
+  y = e.clientY - paper.offsetTop;
   createTextbox(x, y, noteId);
   paper.removeEventListener("click", handlePaperClick);
-  // resetConfig();
-  // showConfig();
 }
 function createTextbox(x, y, noteId) {
   textbox = document.createElement("textarea");
   textbox.id = "textbox" + noteId;
   textbox.style.cssText = "position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid black; border-radius: 4px; padding: 5px; width: 100px; resize: both; overflow: hidden; font-size: 12px; font-family: Helvetica" // style needs change
   paper.appendChild(textbox);
-  textbox.addEventListener("mousedown", initDrag);
+  textbox.addEventListener("mouseenter", initDrag);
   // https://www.w3schools.com/howto/howto_js_draggable.asp
 }
 function initDrag(e) {
@@ -55,8 +50,8 @@ function initDrag(e) {
   console.log("initDrag");
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   // move the DIV from anywhere inside the DIV:
-  if (!(( (el.offsetTop + el.offsetHeight - e.clientY) <= 15) && ( (el.offsetLeft + el.offsetWidth - e.clientX) <= 15) ))
-  {
+  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft)) <= 15) )) {
+
     el.addEventListener("mousedown", dragMouseDown);
   }
 }
@@ -67,7 +62,7 @@ function dragMouseDown(e) {
   // get the mouse cursor position at startup:
   pos3 = e.clientX;
   pos4 = e.clientY;
-  if (!(( (el.offsetTop + el.offsetHeight - e.clientY) <= 15) && ( (el.offsetLeft + el.offsetWidth - e.clientX) <= 15) )) {
+  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft)) <= 15) )) {
     document.body.addEventListener("mousemove", elementDrag);
     el.addEventListener("mousemove", elementDrag);
 
@@ -85,10 +80,12 @@ function elementDrag(e) {
   pos2 = pos4 - e.clientY;
   pos3 = e.clientX;
   pos4 = e.clientY;
-  // console.log("clientX: "+pos3+" clientY:"+pos4);
   // set the element's new position:
-  el.style.top = (el.offsetTop - pos2) + "px";
-  el.style.left = (el.offsetLeft - pos1) + "px";
+  if ( !(((el.offsetLeft - pos1) < 0) || ((el.offsetTop - pos2) < 0) || ((el.offsetLeft - pos1)+el.offsetWidth > (paper.offsetWidth) ) || ((el.offsetTop - pos2)+el.offsetHeight > (paper.offsetHeight) )) ) {
+    el.style.top = (el.offsetTop - pos2) + "px";
+    el.style.left = (el.offsetLeft - pos1) + "px";
+  }
+
 }
 function closeDragElement() {
   el = textbox;
@@ -97,9 +94,6 @@ function closeDragElement() {
   el.removeEventListener("mousemove", elementDrag);
   document.body.removeEventListener("mousemove", elementDrag);
 }
-
-
-
 
 
 
@@ -144,6 +138,8 @@ function appendPaper(i){
   }
 
   newPaper.addEventListener("click",()=>{
+    paper.addEventListener("click", handlePaperClick);
+
     notesgroundWrapper.style.visibility="hidden";
     rollButton.style.visibility="hidden";
     writingPage.style.visibility="visible";
@@ -152,16 +148,15 @@ function appendPaper(i){
     console.log("emitted get-content")
 
     sendButton.addEventListener("click",()=>{
-      // let message = messagebox.value.trim();
       if (textbox.value != ""){
-        // let pctPosX = ( textbox.offsetLeft - paper.offsetLeft ) / paper.offsetWidth;
-        // let pctPosY = ( textbox.offsetTop - paper.offsetTop ) / paper.offsetHeight;
-        let data = {paper: state, width:textbox.clientWidth, height:textbox.clientHeight, positionX: textbox.offsetLeft, positionY: textbox.offsetTop, color: color.value, font: font.value, size: size.value, message: textbox.value};
+        let data = {paper: state, width:textbox.clientWidth, height:textbox.clientHeight, positionX: textbox.offsetLeft / window.innerWidth * 100, positionY: textbox.offsetTop / window.innerHeight * 100, color: color.value, font: font.value, size: size.value, message: textbox.value};
         socket.emit('message-from-one',data);
       }
-      //CLEAR TEXTAREA HERE!!!
-      // messagebox.value = "";
-
+      paper.removeChild(textbox);
+      paper.addEventListener("click", handlePaperClick);
+      color.value = "#000000";
+      size.value = 12;
+      font.value = "sans-serif";
     })
 
     closeButton.addEventListener("click",()=>{
@@ -170,14 +165,15 @@ function appendPaper(i){
       rollButton.style.visibility="visible";
       paper.remove();
       console.log("removed");
-      let newDiv = document.createElement("div");
-      newDiv.id="content";
-      paperWrapper.prepend(newDiv)
+      paper = document.createElement("div");
+      paper.id="content";
+      paperWrapper.prepend(paper);
     })
 
     console.log("This is "+newPaper.id);
   })
 }
+
 
 socket.on("message-to-all",(data)=>{
   console.log(data);
@@ -195,25 +191,17 @@ socket.on("message-to-all",(data)=>{
   }
 })
 
-function appendMessage(width,height,positionX,positionY,color,font,size,message){
-  //CHANGE INTO TEXTAREA HERE!
-  let div = document.createElement("div");
-  let p = document.createElement("p");
-  p.innerHTML = message;
-  p.style.width = width + "px";
-  p.style.height = height + "px";
-  div.style.left = positionX + "px";
-  div.style.top = positionY + "px";
-  div.style.color = color;
-  p.style.fontFamily = font;
-  div.style.fontSize = size+"px";
-  // p.className = "textP";
-  div.className = "textDiv";
-  div.appendChild(p);
-  let paper = document.getElementById('content');
-  paper.append(div);
+function appendMessage(width,height,left,top,valueColor,valueFont,valueSize,message) {
+  let textboxFromServer = document.createElement("textarea");
+  textboxFromServer.value = message;
+  textboxFromServer.style.cssText = "position: absolute; top: "+top+"vh; left: "+left +"vw; cursor: auto; color:"+valueColor+"; background-color: transparent; border: none; padding: 5px; width: "+(width-8)+"px; height:"+(height-8)+"; resize: none; overflow: hidden; font-size: "+valueSize+"px; font-family: "+valueFont+";" // style needs change
+  textboxFromServer.readOnly = true;
+  // textboxFromServer.style.top = textboxFromServer.offsetTop + borderWidth + "px";
+  // textboxFromServer.style.left = textboxFromServer.offsetLeft + borderWidth + "px";
+  paper.appendChild(textboxFromServer);
   console.log("got message")
 }
+
 
 
 socket.on('paper-list-data',(count)=>{
@@ -232,3 +220,9 @@ socket.on('archival-data',(dataList)=>{
     }
   }
 })
+
+// paper.addEventListener("keyup",(event)=>{
+//   if (event.keyCode == 13){
+//     sendButton.click();
+//   }
+// })
