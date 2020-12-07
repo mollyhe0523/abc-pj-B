@@ -40,9 +40,25 @@ function handlePaperClick(e) {
 function createTextbox(x, y, noteId) {
   textbox = document.createElement("textarea");
   textbox.id = "textbox" + noteId;
-  textbox.style.cssText = "position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid black; border-radius: 4px; padding: 5px; width: 100px; resize: both; overflow: hidden; font-size: 12px; font-family: Helvetica" // style needs change
+
+  textbox.style.cssText = "autofocus:true; font-style: normal; font-decoration: normal; font-weight: normal; position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid black; border-radius: 4px; padding: 5px; width: 100px; resize: both; overflow: hidden; font-size: 18px; font-family: sans-serif" // style needs change
   paper.appendChild(textbox);
-  textbox.addEventListener("mouseenter", initDrag);
+  textbox.addEventListener("mousedown", initDrag);
+
+  if ( x + textbox.offsetWidth > paper.offsetWidth ) {
+    textbox.style.width = (paper.offsetWidth - x) + "px";
+  }
+  if ( y + textbox.offsetHeight > paper.offsetHeight ) {
+    textbox.style.height = (paper.offsetHeight - y) + "px";
+  }
+  textbox.addEventListener("mouseup", () => {
+    if ( textbox.offsetLeft + textbox.offsetWidth > paper.offsetWidth ){
+      textbox.style.width = (paper.offsetWidth - textbox.offsetLeft-10) + "px";
+    }
+    if ( textbox.offsetTop + textbox.offsetHeight > paper.offsetHeight ){
+      textbox.style.height = (paper.offsetHeight - textbox.offsetTop-10) + "px";
+    }
+  });
   // https://www.w3schools.com/howto/howto_js_draggable.asp
 }
 function initDrag(e) {
@@ -155,7 +171,7 @@ function appendPaper(i){
       paper.removeChild(textbox);
       paper.addEventListener("click", handlePaperClick);
       color.value = "#000000";
-      size.value = 12;
+      size.value = 18;
       font.value = "sans-serif";
     })
 
@@ -194,7 +210,7 @@ socket.on("message-to-all",(data)=>{
 function appendMessage(width,height,left,top,valueColor,valueFont,valueSize,message) {
   let textboxFromServer = document.createElement("textarea");
   textboxFromServer.value = message;
-  textboxFromServer.style.cssText = "position: absolute; top: "+top+"vh; left: "+left +"vw; cursor: auto; color:"+valueColor+"; background-color: transparent; border: none; padding: 5px; width: "+(width-8)+"px; height:"+(height-8)+"; resize: none; overflow: hidden; font-size: "+valueSize+"px; font-family: "+valueFont+";" // style needs change
+  textboxFromServer.style.cssText = "position: absolute; top: "+top+"vh; left: "+left +"vw; cursor: auto; color:"+valueColor+"; background-color: transparent; border: none; padding: 5px; width: "+(width-8)+"px; height:"+(height-8)+"px; resize: none; overflow: hidden; font-size: "+valueSize+"px; font-family: "+valueFont+";" // style needs change
   textboxFromServer.readOnly = true;
   // textboxFromServer.style.top = textboxFromServer.offsetTop + borderWidth + "px";
   // textboxFromServer.style.left = textboxFromServer.offsetLeft + borderWidth + "px";
