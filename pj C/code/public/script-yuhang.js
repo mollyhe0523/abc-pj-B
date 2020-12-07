@@ -11,7 +11,7 @@ let font = document.getElementById('select-font');
 let size = document.getElementById('input-size');
 let paperWrapper = document.getElementById('paperWrapper');
 let paper = document.getElementById("content");
-let textbox = document.getElementById("content"); // will be redeclared later
+let textbox = document.getElementById("rollButton"); // will be redeclared later
 
 let borderWidth = 1;
 let noteId = 0;
@@ -27,7 +27,7 @@ size.addEventListener("input", () => {
   textbox.style.fontSize = size.value + "px";
 });
 font.addEventListener("input", () => {
-  textbox.style.fontFamily = font.value ;
+  textbox.style.fontFamily = font.value;
 });
 
 function handlePaperClick(e) {
@@ -47,7 +47,7 @@ function createTextbox(x, y, noteId) {
   textbox.id = "textbox" + noteId;
   textbox.style.cssText = "position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid black; border-radius: 4px; padding: 5px; width: 100px; resize: both; overflow: hidden; font-size: 12px; font-family: Helvetica" // style needs change
   paper.appendChild(textbox);
-  textbox.addEventListener("mousedown", initDrag);
+  textbox.addEventListener("mouseenter", initDrag);
   // https://www.w3schools.com/howto/howto_js_draggable.asp
 }
 function initDrag(e) {
@@ -55,8 +55,7 @@ function initDrag(e) {
   console.log("initDrag");
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   // move the DIV from anywhere inside the DIV:
-  if (!(( (el.offsetTop + el.offsetHeight - e.clientY) <= 15) && ( (el.offsetLeft + el.offsetWidth - e.clientX) <= 15) ))
-  {
+  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft)) <= 15) )) {
     el.addEventListener("mousedown", dragMouseDown);
   }
 }
@@ -67,7 +66,7 @@ function dragMouseDown(e) {
   // get the mouse cursor position at startup:
   pos3 = e.clientX;
   pos4 = e.clientY;
-  if (!(( (el.offsetTop + el.offsetHeight - e.clientY) <= 15) && ( (el.offsetLeft + el.offsetWidth - e.clientX) <= 15) )) {
+  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft)) <= 15) )) {
     document.body.addEventListener("mousemove", elementDrag);
     el.addEventListener("mousemove", elementDrag);
 
@@ -88,7 +87,7 @@ function elementDrag(e) {
   pos4 = e.clientY;
   // console.log("clientX: "+pos3+" clientY:"+pos4);
   // set the element's new position:
-  if ( (el.offsetTop <= paper.offsetTop) || (el.offsetLeft <= paper.offsetLeft) !! (el.offsetLeft + el.offsetWidth >= paper.offsetLeft + paper.offsetWidth) || (el.offsetTop + el.offsetHeight <= paper.offsetTop + paper.offsetHeight)) {
+  if ( !(((el.offsetLeft - pos1) < 0) || ((el.offsetTop - pos2) < 0) || ((el.offsetLeft - pos1)+el.offsetWidth > (paper.offsetWidth) ) || ((el.offsetTop - pos2)+el.offsetHeight > (paper.offsetHeight) )) ) {
     el.style.top = (el.offsetTop - pos2) + "px";
     el.style.left = (el.offsetLeft - pos1) + "px";
   }
