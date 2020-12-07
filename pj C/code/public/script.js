@@ -43,7 +43,7 @@ function handlePaperClick(e) {
 function createTextbox(x, y, noteId) {
   textbox = document.createElement("textarea");
   textbox.id = "textbox" + noteId;
-  textbox.style.cssText = "autofocus:true; font-style: normal; font-decoration: normal; font-weight: normal; position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid black; border-radius: 4px; padding: 5px; width: 100px; resize: both; overflow: hidden; font-size: 18px; font-family: sans-serif" // style needs change
+  textbox.style.cssText = "font-style: normal; font-decoration: normal; font-weight: normal; position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid black; border-radius: 4px; padding: 5px; width: 100px; resize: both; overflow: hidden; font-size: 18px; font-family: sans-serif" // style needs change
   paper.appendChild(textbox);
   textbox.addEventListener("mousedown", initDrag);
 
@@ -68,8 +68,7 @@ function initDrag(e) {
   console.log("initDrag");
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   // move the DIV from anywhere inside the DIV:
-  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft)) <= 15) )) {
-
+  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop - writingPage.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft -writingPage.offsetLeft)) <= 15) )) {
     el.addEventListener("mousedown", dragMouseDown);
   }
 }
@@ -80,7 +79,7 @@ function dragMouseDown(e) {
   // get the mouse cursor position at startup:
   pos3 = e.clientX;
   pos4 = e.clientY;
-  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft)) <= 15) )) {
+  if (!(( (el.offsetTop + el.offsetHeight - (e.clientY - paper.offsetTop -writingPage.offsetTop)) <= 15) && ( (el.offsetLeft + el.offsetWidth - (e.clientX - paper.offsetLeft -writingPage.offsetLeft)) <= 15) )) {
     document.body.addEventListener("mousemove", elementDrag);
     el.addEventListener("mousemove", elementDrag);
 
