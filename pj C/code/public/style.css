@@ -6,31 +6,59 @@
   width:10vw
 } */
 
+
+:root {
+  --height: 600px;
+  --paperWidth: 900px;
+  --configWidth: 100px;
+}
+
+html, body{
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#wrapper {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
 #bgWrapper{
   position: absolute;
-
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 #notesgroundWrapper{
   position: absolute;
   width: 100vw;
-  height:100vh;
+  height: 100vh;
+  margin: 0;
 }
+
 #bg{
+  /* Background image is fixed in the viewport so that it doesn't move when
+     the content's height is greater than the image's height */
+  background-attachment: fixed;
+
+  /* This is what makes the background image rescale based
+     on the container's size */
+  background-size: cover;
   position: absolute;
   width: 100vw;
   height:100vh;
   z-index:-1
 }
-body{
-  margin: 0;
-}
 
 #rollButton{
   position: absolute;
-  top:85vh;
-  left:90vw;
+  top:90vh;
+  left:85vw;
   z-index:10;
-  font-size: 20px
+  font-size: 20px;
 }
 .paper:hover{
   cursor: pointer
@@ -54,34 +82,54 @@ body{
     transform:rotate(-360deg);
   }
 }
+
+
 #writingPage{
+  display: flex;
   visibility:hidden;
-  position: absolute;
+  margin:auto;
+  position: relative;
+  /* width: calc( var(--paperWidth) + var(--configWidth) );
+  height: var(--height); */
+  left: calc(50vw - 1/2* calc(var(--paperWidth) + var(--configWidth)));
+  top: calc(50vh - 1/2*var(--height));
   z-index:2;
 }
+
 #paperWrapper{
+  display: flex;
   /* left:10vw;
   top:10vh; */
   /* width:70vw;
   height: 80vh; */
   position: absolute;
+  width: var(--paperWidth);
+  height: var(--height);
+  top: 0;
+  left: 0;
 }
+
 #crumbled{
   position: absolute;
-  left:10vw;
-  top:10vh;
-  width:70vw;
-  height: 80vh;
+  /* left:10vw;
+  top:10vh; */
+  width: var(--paperWidth);
+  height: var(--height);
   border-radius: 5px;
+  margin: 0;
+  top: 0;
+  left: 0;
 }
 #configWrapper{
   border-radius: 5px;
   background-color: #e2e2e2;
-  width:10vw;
-  height: 80vh;
+  width: var(--configWidth);
+  height: var(--height);
   position: absolute;
-  top:10vh;
-  left:80vw;
+  left: var(--paperWidth);
+  top: 0;
+  /* top:10vh;
+  left:calc(10vw + 800px); */
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
@@ -92,14 +140,14 @@ body{
   right:0;
 }
 #input-color, #select-font, #input-size{
-  margin-top: 15vh;
+  margin-top: 90px;
 }
 #input-size{
-  width:8vw;
+  width:80px;
 }
 #sendButton{
   position: absolute;
-  bottom:2%;
+  bottom:20px;
 }
 .textDiv{
   z-index:10;
@@ -118,10 +166,12 @@ p{
 #content{
   position: absolute;
   z-index: 10;
-  width: 70vw;
+  width: var(--paperWidth);
+  height:  var(--height);
+  /* width: 70vw;
   height: 80vh;
   left:10vw;
-  top:10vh;
+  top:10vh; */
 
 }
 /* :root{

@@ -13,6 +13,9 @@ let paperWrapper = document.getElementById('paperWrapper');
 let paper = document.getElementById("content");
 let textbox = document.getElementById("content"); // will be redeclared later
 
+let wrapper = document.getElementById("wrapper");
+let bgWrapper = document.getElementById("bgWrapper");
+
 let borderWidth = 1;
 let noteId = 0;
 let state = "p1"
@@ -32,15 +35,14 @@ font.addEventListener("input", () => {
 function handlePaperClick(e) {
   console.log("handlePaperClick")
   noteId += 1;
-  x = e.clientX - paper.offsetLeft;
-  y = e.clientY - paper.offsetTop;
+  x = e.clientX - paper.offsetLeft - writingPage.offsetLeft;
+  y = e.clientY - paper.offsetTop - writingPage.offsetTop;
   createTextbox(x, y, noteId);
   paper.removeEventListener("click", handlePaperClick);
 }
 function createTextbox(x, y, noteId) {
   textbox = document.createElement("textarea");
   textbox.id = "textbox" + noteId;
-
   textbox.style.cssText = "autofocus:true; font-style: normal; font-decoration: normal; font-weight: normal; position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid black; border-radius: 4px; padding: 5px; width: 100px; resize: both; overflow: hidden; font-size: 18px; font-family: sans-serif" // style needs change
   paper.appendChild(textbox);
   textbox.addEventListener("mousedown", initDrag);
