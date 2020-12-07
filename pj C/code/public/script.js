@@ -170,6 +170,7 @@ function appendPaper(i){
         let data = {paper: state, width:textbox.clientWidth, height:textbox.clientHeight, positionX: textbox.offsetLeft / window.innerWidth * 100, positionY: textbox.offsetTop / window.innerHeight * 100, color: color.value, font: font.value, size: size.value, message: textbox.value};
         socket.emit('message-from-one',data);
       }
+      textbox.value = "";
       paper.removeChild(textbox);
       paper.addEventListener("click", handlePaperClick);
       color.value = "#000000";
