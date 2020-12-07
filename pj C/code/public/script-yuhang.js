@@ -101,7 +101,12 @@ function closeDragElement() {
   document.body.removeEventListener("mousemove", elementDrag);
 }
 
+function removeTextbox() {
 
+}
+function appendMessage(width,height,positionX,positionY,color,font,size,message) {
+
+}
 
 
 
