@@ -55,7 +55,7 @@ body{
   }
 }
 #writingPage{
-  visibility:hidden;
+  /* visibility:hidden; */
   position: absolute;
   z-index:2;
 }
@@ -105,6 +105,12 @@ body{
 }
 p{
   font-family: sans-serif;
+}
+#content{
+  position: absolute;
+  z-index: 10;
+  width: 70vw;
+  height: 80vh;
 }
 /* :root{
   --borderThickness: 4px;
