@@ -33,8 +33,10 @@ font.addEventListener("input", () => {
 function handlePaperClick(e) {
   console.log("handlePaperClick")
   noteId += 1;
-  x = e.clientX;
-  y = e.clientY;
+  x=e.clientX
+  y=e.clientY
+  // x = ((e.clientX/window.innerWidth-0.1) * window.innerWidth);
+  // y = ((e.clientY/window.innerHeight-0.1) * window.innerHeight);
   createTextbox(x, y, noteId);
   paper.removeEventListener("click", handlePaperClick);
   // resetConfig();
@@ -83,7 +85,7 @@ function elementDrag(e) {
   pos2 = pos4 - e.clientY;
   pos3 = e.clientX;
   pos4 = e.clientY;
-  console.log("clientX: "+pos3+" clientY:"+pos4);
+  // console.log("clientX: "+pos3+" clientY:"+pos4);
   // set the element's new position:
   el.style.top = (el.offsetTop - pos2) + "px";
   el.style.left = (el.offsetLeft - pos1) + "px";
@@ -165,7 +167,7 @@ function closeDragElement() {
 //       writingPage.style.visibility="hidden";
 //       notesgroundWrapper.style.visibility="visible";
 //       rollButton.style.visibility="visible";
-//       content.remove();
+//       paper.remove();
 //       console.log("removed");
 //       let newDiv = document.createElement("div");
 //       newDiv.id="content";
@@ -199,8 +201,8 @@ function closeDragElement() {
 //   div.style.left = Math.random()*60+"vh";
 //   div.style.top = Math.random()*70+"vh";
 //   div.appendChild(p);
-//   let content = document.getElementById('content');
-//   content.append(div);
+//   let paper = document.getElementById('content');
+//   paper.append(div);
 //   console.log("got message")
 // }
 //
