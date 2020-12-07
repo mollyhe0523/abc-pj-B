@@ -10,6 +10,10 @@ let btnSubmit = document.getElementById("btnSubmit");
 
 let borderWidth = 1;
 
+let btnB = document.getElementById("btnB");
+let btnI = document.getElementById("btnI");
+let btnU = document.getElementById("btnU");
+
 paper.addEventListener("click", handlePaperClick);
 
 inputColor.addEventListener("input", () => {
@@ -19,7 +23,7 @@ inputSize.addEventListener("input", () => {
   textbox.style.fontSize = inputSize.value + "px";
 });
 
-btnSubmit.addEventListener("click", () => {
+sendButton.addEventListener("click", () => {
   submit();
   resetConfig();
   hideConfig();
@@ -39,11 +43,61 @@ function handlePaperClick(e) {
 function createTextbox(x, y, noteId) {
   textbox = document.createElement("textarea");
   textbox.id = "textbox" + noteId;
-  textbox.style.cssText = "position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid #ccc; border-radius: 4px; padding: 0px; width: 300px; resize: both; overflow: hidden; font-size: 12px; font-family: Helvetica" // style needs change
+
+  textbox.style.cssText = "autofocus:true; font-style: normal; font-decoration: normal; font-weight: normal; position: absolute; top: "+y+"px; left: "+x+"px; cursor: move; background-color: transparent; border: "+borderWidth+"px solid #ccc; border-radius: 4px; padding: 0px; width: 300px; resize: both; overflow: hidden; font-size: 12px; font-family: Helvetica" // style needs change
   paper.appendChild(textbox);
   textbox.addEventListener("mousedown", initDrag);
+
+  if ( x + textbox.offsetWidth > paper.offsetWidth ) {
+    textbox.style.width = (paper.offsetWidth - x) + "px";
+  }
+  if ( y + textbox.offsetHeight > paper.offsetHeight ) {
+    textbox.style.height = (paper.offsetHeight - y) + "px";
+  }
+  textbox.addEventListener("mouseup", () => {
+    if ( textbox.offsetLeft + textbox.offsetWidth > paper.offsetWidth ){
+      textbox.style.width = (paper.offsetWidth - textbox.offsetLeft) + "px";
+    }
+    if ( textbox.offsetTop + textbox.offsetHeight > paper.offsetHeight ){
+      textbox.style.height = (paper.offsetHeight - textbox.offsetTop) + "px";
+    }
+  });
   // https://www.w3schools.com/howto/howto_js_draggable.asp
 }
+
+btnB.addEventListener("click", () => {
+  if ( textbox.style.fontWeight == "normal") {
+    btnB.style.backgroundColor = "blue";
+    btnB.style.color = "white";
+    textbox.style.fontWeight = "bold";
+  } else if (textbox.style.fontWeight == "bold") {
+    btnB.style.backgroundColor = "white";
+    btnB.style.color = "black";
+    textbox.style.fontWeight = "normal";
+  }
+})
+btnI.addEventListener("click", () => {
+  if ( textbox.style.fontStyle == "italic") {
+    btnI.style.backgroundColor = "white";
+    btnI.style.color = "black";
+    textbox.style.fontStyle = "normal";
+  } else {
+    btnI.style.backgroundColor = "blue";
+    btnI.style.color = "white";
+    textbox.style.fontStyle = "italic";
+  }
+})
+btnU.addEventListener("click", () => {
+  if ( textbox.style.textDecoration == "underline") {
+    btnU.style.backgroundColor = "white";
+    btnU.style.color = "black";
+    textbox.style.textDecoration = "none";
+  } else {
+    btnU.style.backgroundColor = "blue";
+    btnU.style.color = "white";
+    textbox.style.textDecoration = "underline";
+  }
+});
 
 function showConfig() {
   config.style.visibility = "visible";
@@ -98,10 +152,11 @@ function elementDrag(e) {
   pos2 = pos4 - e.clientY;
   pos3 = e.clientX;
   pos4 = e.clientY;
-  console.log("clientX: "+pos3+" clientY:"+pos4);
   // set the element's new position:
-  el.style.top = (el.offsetTop - pos2) + "px";
-  el.style.left = (el.offsetLeft - pos1) + "px";
+  if ( !(((el.offsetLeft - pos1) < 0) || ((el.offsetTop - pos2) < 0) || ((el.offsetLeft - pos1)+el.offsetWidth > (paper.offsetWidth) ) || ((el.offsetTop - pos2)+el.offsetHeight > (paper.offsetHeight) )) ) {
+    el.style.top = (el.offsetTop - pos2) + "px";
+    el.style.left = (el.offsetLeft - pos1) + "px";
+  }
 }
 
 function closeDragElement() {
