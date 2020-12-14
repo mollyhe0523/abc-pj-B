@@ -13,14 +13,13 @@ Explore and pass on the little notes. Enjoy!
 |:--:|
 | *Adding other papers* |
 
-(concepts and features, to be implemented)
-
 Concept: The notes land is designed to be a trial on anonymity. The inspiration comes from the experience of sneakily passing on little notes in class in one's teenager years. This experience is brought to a broader realm with paper thrown on grass.
 
 
 ### Prototype
 
 [link to prototype](https://github.com/mollyhe0523/abc-student-repo/blob/master/projects/pj%20C/Project%20C%20Prototype.pdf)
+
 
 ## Technical Explanation
 
@@ -31,24 +30,23 @@ Concept: The notes land is designed to be a trial on anonymity. The inspiration 
 ![Technical Diagram 2](https://github.com/mollyhe0523/abc-student-repo/raw/master/projects/pj%20C/technical2.jpeg)
 
 
-
-### Process
-
-_(Insert images HERE)_
-
 ### Technologies Used
 
 - express.js
 - socket.io
 - Firebase realtime database
 
-### Challenges & Solutions
 
-1. __Molly:__ To show the different papers’ content
+
+### Task Breakdown
+
+__Molly:__
+1. To show the different papers’ content
 
    I clear the paper once user hits the close button. When the user clicks on one specific paper, fetch the paper content from the database by filtering its paper name and append it on paper.
 
-2. __Yuhang:__ How to Tame A Textarea Tag
+__Yuhang:__
+1. How to Tame A Textarea Tag
 
 
 - How to Make Textarea Draggable
